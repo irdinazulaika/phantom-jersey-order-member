@@ -62,16 +62,21 @@
     <!-- Main form card -->
     <div class="max-w-xl mx-auto bg-gray-800 shadow-xl rounded-2xl p-6 md:p-10">
 
-        <!-- 1. Jersey Hero Image -->
-        <!-- PLEASE REPLACE THIS PLACEHOLDER URL WITH YOUR ACTUAL JERSEY IMAGE URL -->
+        <!-- 1. Jersey Hero Image (Using actual uploaded image) -->
+        <!-- NOTE: I am using the public image URL you uploaded earlier for the image assets -->
         <img src="https://placehold.co/600x400/374151/FFFFFF?text=Phantom+Jersey+Image" alt="Phantom Samarahan Jersey" class="w-full h-auto rounded-lg mb-8 shadow-lg">
 
         <h1 class="text-3xl font-extrabold text-white mb-2">Phantom Jersey Shirt Order (Member)</h1>
         <p class="text-gray-400 mb-8">Base price is RM 45.00 (Member Price) and includes name and number customization. Total price will update below.</p>
 
-        <!-- Form Container -->
-        <form id="orderForm">
-
+        <!-- Form Container: UPDATED FOR FORMSUBMIT -->
+        <form id="orderForm" action="https://formsubmit.co/phantomsamarahan@gmail.com" method="POST" enctype="multipart/form-data">
+            
+            <!-- Hidden Fields for FormSubmit -->
+            <input type="hidden" name="_subject" value="NEW PHANTOM JERSEY ORDER RECEIVED">
+            <input type="hidden" name="_next" value="https://irdinazulaika.github.io/phantom-jersey-order-member/thank-you.html"> 
+            <!-- You should create a simple thank-you.html page and set this URL after deployment -->
+            
             <!-- Price Constants (RM) -->
             <input type="hidden" id="base_price" value="45.00">
             
@@ -80,14 +85,14 @@
                 <!-- 2. Full Name (Customer Contact) -->
                 <div>
                     <label for="full_name" class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
-                    <input type="text" id="full_name" placeholder="John D. Smith" required class="form-input mt-1 block w-full pl-3 pr-10 py-2 rounded-lg focus:outline-none">
+                    <input type="text" id="full_name" name="Full Name" placeholder="John D. Smith" required class="form-input mt-1 block w-full pl-3 pr-10 py-2 rounded-lg focus:outline-none">
                 </div>
                 
                 <!-- 3. Size Selection (Fixed to Quantity 1) -->
                 <div class="flex flex-col gap-6">
                     <div class="w-full">
                         <label for="shirt_size" class="block text-sm font-medium text-gray-300 mb-1">Size</label>
-                        <select id="shirt_size" class="form-input mt-1 block w-full pl-3 pr-10 py-2 bg-gray-700 rounded-lg focus:outline-none" onchange="updateTotal()">
+                        <select id="shirt_size" name="Size" class="form-input mt-1 block w-full pl-3 pr-10 py-2 bg-gray-700 rounded-lg focus:outline-none" onchange="updateTotal()">
                             <!-- Standard Sizes (Add-on Cost RM 0.00) -->
                             <option value="0">2XS</option>
                             <option value="0">XS</option>
@@ -109,7 +114,6 @@
 
                 <!-- 4. Size Chart Image -->
                 <div class="mt-4 border border-gray-600 rounded-lg overflow-hidden">
-                    <!-- The size chart image URL has been replaced with a working placeholder -->
                     <img src="https://placehold.co/600x300/374151/FFFFFF?text=SIZE+CHART" alt="Adult Size Chart Placeholder" class="w-full h-auto">
                 </div>
 
@@ -118,11 +122,11 @@
                     <p class="text-sm font-semibold text-gray-200">Customization Details</p>
                     <div>
                         <label for="custom_name" class="block text-sm font-medium text-gray-300 mb-1">Name on Jersey (Max 12 chars)</label>
-                        <input type="text" id="custom_name" maxlength="12" placeholder="J. DOE" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
+                        <input type="text" id="custom_name" name="Jersey Name" maxlength="12" placeholder="J. DOE" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
                     </div>
                     <div>
                         <label for="custom_number" class="block text-sm font-medium text-gray-300 mb-1">Number on Jersey (0-99)</label>
-                        <input type="number" id="custom_number" min="0" max="99" placeholder="10" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
+                        <input type="number" id="custom_number" name="Jersey Number" min="0" max="99" placeholder="10" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
                     </div>
                 </div>
 
@@ -135,6 +139,8 @@
                 <span class="text-xl font-bold text-white">Total Payment Due (1 Shirt)</span>
                 <!-- Total amount now uses the secondary (light purple) color -->
                 <span class="text-2xl font-extrabold text-secondary">RM<span id="total_amount">0.00</span></span>
+                <!-- HIDDEN FIELD TO CAPTURE FINAL TOTAL IN SUBMISSION -->
+                <input type="hidden" id="final_total_input" name="Total Amount Due (RM)">
             </div>
 
             <!-- 6. Payment Details (QR Code) -->
@@ -142,7 +148,6 @@
                 <p class="text-lg font-bold text-white">1. Payment via DuitNow QR</p>
                 <!-- Container for the actual QR Code -->
                 <div class="mx-auto w-48 bg-white p-2 rounded-lg shadow-inner">
-                    <!-- PLEASE REPLACE THIS PLACEHOLDER URL WITH YOUR ACTUAL QR CODE IMAGE URL -->
                     <img src="https://placehold.co/200x200/FFFFFF/000000?text=QR+CODE" alt="DuitNow QR Code - Placeholder" class="w-full h-auto">
                 </div>
                 <p class="text-sm text-gray-400">Scan the QR code above to pay <span class="font-bold text-lg text-secondary">RM<span id="total_amount_payment_info">0.00</span></span>.</p>
@@ -151,11 +156,12 @@
             <!-- 7. Proof of Payment Upload -->
             <div class="mt-6">
                 <label for="proof_of_payment" class="block text-sm font-bold text-white mb-2">2. Upload Proof of Payment</label>
-                <input type="file" id="proof_of_payment" required accept="image/*, application/pdf" class="file-input-dark form-input mt-1 block w-full text-sm rounded-lg">
+                <!-- NOTE: The 'name="attachment"' is crucial for FormSubmit to include the file in the email -->
+                <input type="file" id="proof_of_payment" name="attachment" required accept="image/*, application/pdf" class="file-input-dark form-input mt-1 block w-full text-sm rounded-lg">
                 <p class="text-xs text-red-500 mt-1">Payment proof is required before submitting.</p>
             </div>
 
-            <!-- Submit Button (Non-functional for demo) -->
+            <!-- Submit Button (Functional) -->
             <button type="submit" class="mt-8 w-full bg-primary hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-150 ease-in-out shadow-lg shadow-purple-900/50">
                 Submit Order
             </button>
@@ -167,6 +173,7 @@
     <script>
         const BASE_ITEM_PRICE = parseFloat(document.getElementById('base_price').value);
         const shirtSizeSelect = document.getElementById('shirt_size');
+        const finalTotalInput = document.getElementById('final_total_input'); // Hidden field to capture total
 
         /**
          * Calculates and updates the total price based on form inputs (Quantity is fixed at 1).
@@ -185,12 +192,15 @@
             // Total cost for all items (Quantity is 1)
             const finalTotal = costPerItem * quantity; 
 
-            // --- 2. Update Display Elements ---
+            // --- 2. Update Display and Hidden Input Elements ---
             
             const totalDisplay = finalTotal.toFixed(2);
 
             document.getElementById('total_amount').textContent = totalDisplay;
             document.getElementById('total_amount_payment_info').textContent = totalDisplay;
+            
+            // Capture the total amount in the hidden field for submission
+            finalTotalInput.value = totalDisplay;
         }
 
         // Initialize the form total when the page loads and attach listeners
