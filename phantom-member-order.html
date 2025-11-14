@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phantom Jersey Shirt Order (Member)</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for 'Inter' font and new "Phantom" theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Swapped to a purple-based theme to match the jersey
+                        'primary': '#9333EA', // Purple 600
+                        'secondary': '#C084FC', // Purple 400
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styling for dark mode form inputs */
+        .form-input {
+            transition: all 0.2s ease-in-out;
+            background-color: #374151; /* Gray 700 */
+            border-color: #4B5563; /* Gray 600 */
+            color: #F3F4F6; /* Gray 100 */
+        }
+        .form-input:focus {
+            /* Updated focus ring to new primary color */
+            box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.4);
+            border-color: #9333EA;
+        }
+        
+        /* Style for file input button in dark mode */
+        .file-input-dark {
+            color: #9CA3AF; /* Gray 400 */
+        }
+        .file-input-dark::file-selector-button {
+            margin-right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px; /* full */
+            border-width: 0;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+            background-color: #9333EA; /* Purple 600 */
+            color: #FFFFFF;
+        }
+         .file-input-dark::file-selector-button:hover {
+            background-color: #7E22CE; /* Purple 700 */
+         }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen p-4 sm:p-8 font-sans">
+
+    <!-- Main form card -->
+    <div class="max-w-xl mx-auto bg-gray-800 shadow-xl rounded-2xl p-6 md:p-10">
+
+        <!-- 1. Jersey Hero Image -->
+        <!-- PLEASE REPLACE THIS PLACEHOLDER URL WITH YOUR ACTUAL JERSEY IMAGE URL -->
+        <img src="https://placehold.co/600x400/374151/FFFFFF?text=Phantom+Jersey+Image" alt="Phantom Samarahan Jersey" class="w-full h-auto rounded-lg mb-8 shadow-lg">
+
+        <h1 class="text-3xl font-extrabold text-white mb-2">Phantom Jersey Shirt Order (Member)</h1>
+        <p class="text-gray-400 mb-8">Base price is RM 45.00 (Member Price) and includes name and number customization. Total price will update below.</p>
+
+        <!-- Form Container -->
+        <form id="orderForm">
+
+            <!-- Price Constants (RM) -->
+            <input type="hidden" id="base_price" value="45.00">
+            
+            <div class="space-y-6">
+
+                <!-- 2. Full Name (Customer Contact) -->
+                <div>
+                    <label for="full_name" class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                    <input type="text" id="full_name" placeholder="John D. Smith" required class="form-input mt-1 block w-full pl-3 pr-10 py-2 rounded-lg focus:outline-none">
+                </div>
+                
+                <!-- 3. Size Selection (Fixed to Quantity 1) -->
+                <div class="flex flex-col gap-6">
+                    <div class="w-full">
+                        <label for="shirt_size" class="block text-sm font-medium text-gray-300 mb-1">Size</label>
+                        <select id="shirt_size" class="form-input mt-1 block w-full pl-3 pr-10 py-2 bg-gray-700 rounded-lg focus:outline-none" onchange="updateTotal()">
+                            <!-- Standard Sizes (Add-on Cost RM 0.00) -->
+                            <option value="0">2XS</option>
+                            <option value="0">XS</option>
+                            <option value="0">S</option>
+                            <option value="0">M</option>
+                            <option value="0" selected>L</option>
+                            <option value="0">XL</option>
+                            <!-- Add-on Sizes with Premium Cost (Based on provided image) -->
+                            <option value="1.50">2XL (+RM 1.50)</option>
+                            <option value="3.50">3XL (+RM 3.50)</option>
+                            <option value="4.50">4XL (+RM 4.50)</option>
+                            <option value="7.50">5XL (+RM 7.50)</option>
+                            <option value="9.50">6XL (+RM 9.50)</option>
+                            <option value="14.00">7XL (+RM 14.00)</option>
+                            <option value="19.00">8XL (+RM 19.00)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 4. Size Chart Image -->
+                <div class="mt-4 border border-gray-600 rounded-lg overflow-hidden">
+                    <!-- The size chart image URL has been replaced with a working placeholder -->
+                    <img src="https://placehold.co/600x300/374151/FFFFFF?text=SIZE+CHART" alt="Adult Size Chart Placeholder" class="w-full h-auto">
+                </div>
+
+                <!-- 5. Customization Details -->
+                <div class="bg-gray-700 p-4 rounded-xl border border-gray-600 space-y-3">
+                    <p class="text-sm font-semibold text-gray-200">Customization Details</p>
+                    <div>
+                        <label for="custom_name" class="block text-sm font-medium text-gray-300 mb-1">Name on Jersey (Max 12 chars)</label>
+                        <input type="text" id="custom_name" maxlength="12" placeholder="J. DOE" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="custom_number" class="block text-sm font-medium text-gray-300 mb-1">Number on Jersey (0-99)</label>
+                        <input type="number" id="custom_number" min="0" max="99" placeholder="10" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
+                    </div>
+                </div>
+
+            </div>
+
+            <hr class="my-8 border-gray-600">
+            
+            <!-- Total Calculation Summary -->
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-xl font-bold text-white">Total Payment Due (1 Shirt)</span>
+                <!-- Total amount now uses the secondary (light purple) color -->
+                <span class="text-2xl font-extrabold text-secondary">RM<span id="total_amount">0.00</span></span>
+            </div>
+
+            <!-- 6. Payment Details (QR Code) -->
+            <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 space-y-4 text-center">
+                <p class="text-lg font-bold text-white">1. Payment via DuitNow QR</p>
+                <!-- Container for the actual QR Code -->
+                <div class="mx-auto w-48 bg-white p-2 rounded-lg shadow-inner">
+                    <!-- PLEASE REPLACE THIS PLACEHOLDER URL WITH YOUR ACTUAL QR CODE IMAGE URL -->
+                    <img src="https://placehold.co/200x200/FFFFFF/000000?text=QR+CODE" alt="DuitNow QR Code - Placeholder" class="w-full h-auto">
+                </div>
+                <p class="text-sm text-gray-400">Scan the QR code above to pay <span class="font-bold text-lg text-secondary">RM<span id="total_amount_payment_info">0.00</span></span>.</p>
+            </div>
+
+            <!-- 7. Proof of Payment Upload -->
+            <div class="mt-6">
+                <label for="proof_of_payment" class="block text-sm font-bold text-white mb-2">2. Upload Proof of Payment</label>
+                <input type="file" id="proof_of_payment" required accept="image/*, application/pdf" class="file-input-dark form-input mt-1 block w-full text-sm rounded-lg">
+                <p class="text-xs text-red-500 mt-1">Payment proof is required before submitting.</p>
+            </div>
+
+            <!-- Submit Button (Non-functional for demo) -->
+            <button type="submit" class="mt-8 w-full bg-primary hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-150 ease-in-out shadow-lg shadow-purple-900/50">
+                Submit Order
+            </button>
+
+        </form>
+
+    </div>
+
+    <script>
+        const BASE_ITEM_PRICE = parseFloat(document.getElementById('base_price').value);
+        const shirtSizeSelect = document.getElementById('shirt_size');
+
+        /**
+         * Calculates and updates the total price based on form inputs (Quantity is fixed at 1).
+         */
+        function updateTotal() {
+            const quantity = 1; // Fixed quantity as requested
+            
+            // Get size add-on cost from the selected option's value
+            const sizeAddOn = parseFloat(shirtSizeSelect.value) || 0; 
+
+            // --- 1. Item Cost Calculation ---
+            
+            // Calculate cost per single shirt: Base Price (45.00) + Size Add-on
+            let costPerItem = BASE_ITEM_PRICE + sizeAddOn; 
+            
+            // Total cost for all items (Quantity is 1)
+            const finalTotal = costPerItem * quantity; 
+
+            // --- 2. Update Display Elements ---
+            
+            const totalDisplay = finalTotal.toFixed(2);
+
+            document.getElementById('total_amount').textContent = totalDisplay;
+            document.getElementById('total_amount_payment_info').textContent = totalDisplay;
+        }
+
+        // Initialize the form total when the page loads and attach listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attach listener to size select
+            shirtSizeSelect.addEventListener('change', updateTotal);
+            
+            // Initial call to set the total and prices
+            updateTotal();
+        });
+
+    </script>
+</body>
+</html>
