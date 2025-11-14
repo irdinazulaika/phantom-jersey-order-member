@@ -63,19 +63,16 @@
     <div class="max-w-xl mx-auto bg-gray-800 shadow-xl rounded-2xl p-6 md:p-10">
 
         <!-- 1. Jersey Hero Image (Using actual uploaded image) -->
-        <!-- NOTE: I am using the public image URL you uploaded earlier for the image assets -->
         <img src="https://placehold.co/600x400/374151/FFFFFF?text=Phantom+Jersey+Image" alt="Phantom Samarahan Jersey" class="w-full h-auto rounded-lg mb-8 shadow-lg">
 
         <h1 class="text-3xl font-extrabold text-white mb-2">Phantom Jersey Shirt Order (Member)</h1>
         <p class="text-gray-400 mb-8">Base price is RM 45.00 (Member Price) and includes name and number customization. Total price will update below.</p>
 
-        <!-- Form Container: UPDATED FOR FORMSUBMIT -->
-        <form id="orderForm" action="https://formsubmit.co/phantomsamarahan@gmail.com" method="POST" enctype="multipart/form-data">
+        <!-- Form Container: NOW CONFIGURED FOR NETLIFY FORMS -->
+        <form id="orderForm" name="order" method="POST" data-netlify="true" enctype="multipart/form-data">
             
-            <!-- Hidden Fields for FormSubmit -->
-            <input type="hidden" name="_subject" value="NEW PHANTOM JERSEY ORDER RECEIVED">
-            <input type="hidden" name="_next" value="https://irdinazulaika.github.io/phantom-jersey-order-member/thank-you.html"> 
-            <!-- You should create a simple thank-you.html page and set this URL after deployment -->
+            <!-- Hidden Fields for Netlify Redirect -->
+            <input type="hidden" name="form-name" value="order">
             
             <!-- Price Constants (RM) -->
             <input type="hidden" id="base_price" value="45.00">
@@ -85,20 +82,32 @@
                 <!-- 2. Full Name (Customer Contact) -->
                 <div>
                     <label for="full_name" class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
-                    <input type="text" id="full_name" name="Full Name" placeholder="John D. Smith" required class="form-input mt-1 block w-full pl-3 pr-10 py-2 rounded-lg focus:outline-none">
+                    <input type="text" id="full_name" name="Full Name" placeholder="Your Name" required class="form-input mt-1 block w-full pl-3 pr-10 py-2 rounded-lg focus:outline-none">
                 </div>
                 
+                <!-- Customer Email for Confirmation Copy -->
+                <div>
+                    <label for="customer_email" class="block text-sm font-medium text-gray-300 mb-1">Email Address (For Confirmation of Submission)</label>
+                    <input type="email" id="customer_email" name="Email" placeholder="your.email@address.com" required class="form-input mt-1 block w-full pl-3 pr-10 py-2 rounded-lg focus:outline-none">
+                </div>
+
+                <!-- Phone Number -->
+                <div>
+                    <label for="phone_number" class="block text-sm font-medium text-gray-300 mb-1">Phone Number (e.g., 601X-XXXXXXX)</label>
+                    <input type="tel" id="phone_number" name="Phone Number" placeholder="6012-3456789" required class="form-input mt-1 block w-full pl-3 pr-10 py-2 rounded-lg focus:outline-none">
+                </div>
+
                 <!-- 3. Size Selection (Fixed to Quantity 1) -->
                 <div class="flex flex-col gap-6">
                     <div class="w-full">
                         <label for="shirt_size" class="block text-sm font-medium text-gray-300 mb-1">Size</label>
                         <select id="shirt_size" name="Size" class="form-input mt-1 block w-full pl-3 pr-10 py-2 bg-gray-700 rounded-lg focus:outline-none" onchange="updateTotal()">
-                            <!-- Standard Sizes (Add-on Cost RM 0.00) -->
-                            <option value="0">2XS</option>
+                            <!-- Default is now 2XS -->
+                            <option value="0" selected>2XS</option>
                             <option value="0">XS</option>
                             <option value="0">S</option>
                             <option value="0">M</option>
-                            <option value="0" selected>L</option>
+                            <option value="0">L</option>
                             <option value="0">XL</option>
                             <!-- Add-on Sizes with Premium Cost (Based on provided image) -->
                             <option value="1.50">2XL (+RM 1.50)</option>
@@ -122,11 +131,11 @@
                     <p class="text-sm font-semibold text-gray-200">Customization Details</p>
                     <div>
                         <label for="custom_name" class="block text-sm font-medium text-gray-300 mb-1">Name on Jersey (Max 12 chars)</label>
-                        <input type="text" id="custom_name" name="Jersey Name" maxlength="12" placeholder="J. DOE" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
+                        <input type="text" id="custom_name" name="Jersey Name" maxlength="12" placeholder="NICKNAME" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
                     </div>
                     <div>
                         <label for="custom_number" class="block text-sm font-medium text-gray-300 mb-1">Number on Jersey (0-99)</label>
-                        <input type="number" id="custom_number" name="Jersey Number" min="0" max="99" placeholder="10" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
+                        <input type="number" id="custom_number" name="Jersey Number" min="0" max="99" placeholder="99" required class="form-input mt-1 block w-full pl-3 pr-4 py-2 rounded-lg focus:outline-none">
                     </div>
                 </div>
 
@@ -156,8 +165,8 @@
             <!-- 7. Proof of Payment Upload -->
             <div class="mt-6">
                 <label for="proof_of_payment" class="block text-sm font-bold text-white mb-2">2. Upload Proof of Payment</label>
-                <!-- NOTE: The 'name="attachment"' is crucial for FormSubmit to include the file in the email -->
-                <input type="file" id="proof_of_payment" name="attachment" required accept="image/*, application/pdf" class="file-input-dark form-input mt-1 block w-full text-sm rounded-lg">
+                <!-- NOTE: The 'name' attribute must match the field in Netlify, and type="file" is required. -->
+                <input type="file" id="proof_of_payment" name="Proof of Payment" required accept="image/*, application/pdf" class="file-input-dark form-input mt-1 block w-full text-sm rounded-lg">
                 <p class="text-xs text-red-500 mt-1">Payment proof is required before submitting.</p>
             </div>
 
